@@ -37,7 +37,7 @@ def channel(x_location: float, width: float, depth: float, length: float,
         for i in range(int(n_steps_over)):
             x = x_start + i*step_over
             y = ((i + 1) % 2)*length
-            nc = nc + f'G1 X{x} Y{y} F{feed_rate}\n'
+            nc = nc + f'G1 X{x} F{feed_rate}\nG1 Y{y} F{feed_rate}\n'
         nc = nc + f'G0 Z{z_safe}\nG0 X{x_start} Y0\n'
 
     # Write gcode to file
