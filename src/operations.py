@@ -1,12 +1,17 @@
+import os
 import numpy as np
 import fire
 
 # gcode header
 header = 'G90 G94\nG17\nG20\nG28 G91 X0 Y0 Z1.0\nG90\nT1\nS15000 M3\nG54\n'
 
+# Delete existing nc file if it exists
+if os.path.exists("./out/path.nc"):
+  os.remove("./out/path.nc")
 
-def channel(x_location, width, depth, length, cutter_diameter=0.25, overlap=0.1, 
-         step_down_max = None, z_safe = 0.075, feed_rate=40):
+def channel(x_location: float, width: float, depth: float, length: float, 
+            cutter_diameter: float = 0.25, overlap: float = 0.1, 
+         step_down_max: float = None, z_safe: float = 0.075, feed_rate: float = 40):
 
     # Initialize string for gcode
     x_start = x_location + (cutter_diameter / 2)
@@ -26,10 +31,10 @@ def channel(x_location, width, depth, length, cutter_diameter=0.25, overlap=0.1,
     step_down = depth / n_steps_down
 
     # Iterate through horizontal and depth paths to cut channel
-    for j in range(n_steps_down):
+    for j in range(int(n_steps_down)):
         z = -(j + 1)*step_down
         nc = nc + f'G1 Z{z} F{feed_rate}\n'
-        for i in range(n_steps_over):
+        for i in range(int(n_steps_over)):
             x = x_start + i*step_over
             y = ((i + 1) % 2)*length
             nc = nc + f'G1 X{x} Y{y} F{feed_rate}\n'
