@@ -24,7 +24,7 @@ def channel(x_location: float, width: float, depth: float, length: float,
     # Determine number of paths and step-over distance
     step_over_max = cutter_diameter*(1 - overlap)
     n_steps_over = np.ceil((width - cutter_diameter) / step_over_max)
-    step_over = (width - cutter_diameter) / n_steps_over
+    step_over = (width - cutter_diameter) / (n_steps_over)
 
     # Determine number of z-depths and step-down distance
     n_steps_down = np.ceil(depth / step_down_max)
@@ -34,7 +34,7 @@ def channel(x_location: float, width: float, depth: float, length: float,
     for j in range(int(n_steps_down)):
         z = -(j + 1)*step_down
         nc = nc + f'G1 Z{z} F{feed_rate}\n'
-        for i in range(int(n_steps_over)):
+        for i in range(int(n_steps_over + 1)):
             x = x_start + i*step_over
             y = ((i + 1) % 2)*length
             nc = nc + f'G1 X{x} F{feed_rate}\nG1 Y{y} F{feed_rate}\n'
